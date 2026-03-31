@@ -89,7 +89,7 @@ This project demonstrates that while used hardware prices are noisy, display qua
 
 ---
 
-## Notebook Link
+## 👉 Notebook Link
 
 Explore the full analysis and code in the Google Colab notebook:
 
