@@ -86,3 +86,11 @@ We evaluated five regression models using `GridSearchCV` and 5-fold cross-valida
 
 ## 📌 Conclusion
 This project demonstrates that while used hardware prices are noisy, display quality and data completeness are the primary indicators of value. Ensemble tree-based models (XGBoost/Random Forest) proved most effective at capturing the non-linear interactions inherent in hardware pricing.
+
+---
+
+## Notebook Link
+
+Explore the full analysis and code in the Google Colab notebook:
+
+[Laptop prices on eBay](https://github.com/tahirp/Capstone-Laptop-prices-on-eBay/blob/main/Capstone_Laptop_prices_on_eBay.ipynb)
