@@ -1,126 +1,86 @@
-
-# 📊 Capstone Project: Laptop Prices on eBay
+# 📊 Capstone Project: Used Laptop Price Prediction
 
 ## 📌 Project Overview
-Pricing used laptops accurately in online marketplaces is challenging due to rapid hardware depreciation, inconsistent specifications, and varying seller behavior. As a result, sellers often overprice or underprice listings, leading to unsold inventory or lost value.
-
-This project analyzes real‑world **eBay used laptop listings** and develops a **machine learning regression model** to identify key price drivers and **predict fair market prices** based on laptop specifications. The analysis follows a complete data science workflow, emphasizing practical, real‑world considerations such as noisy data, missing values, and heterogeneous feature representations.
+Pricing used laptops accurately in online marketplaces is challenging due to rapid hardware depreciation and inconsistent specifications. This project analyzes real-world eBay used laptop listings and develops machine learning regression models to predict fair market prices based on hardware specifications.
 
 ---
 
 ## 🎯 Problem Statement
-Online marketplaces like eBay lack a standardized pricing reference for used laptops. Prices vary widely for similar devices, creating inefficiencies for both buyers and sellers.
-
-This project aims to answer:
-- Which laptop features most strongly influence resale price?
-- Can a machine learning model reasonably predict used laptop prices given noisy marketplace data?
+Online marketplaces lack a standardized pricing reference for used laptops, leading to inefficiencies for both buyers and sellers. This project aims to identify which features most strongly influence resale price and build a model to reasonably predict these prices.
 
 ---
 
 ## ✅ Project Objectives
 1. Explore and understand pricing patterns in used laptop listings.
-2. Clean and preprocess unstructured and inconsistent real‑world data.
-3. Identify the most influential hardware and listing features affecting price.
-4. Train and evaluate regression models for price prediction.
-5. Assess model performance using appropriate evaluation metrics.
+2. Clean and preprocess unstructured and inconsistent real-world data.
+3. Identify influential hardware features (CPU, RAM, Storage, Screen) affecting price.
+4. Train and evaluate multiple regression models (Linear, Random Forest, XGBoost, MLP).
+
+### Key Performance Indicators (KPIs)
+*   **R-squared (R2)**: Target 0.80 or higher.
+*   **Mean Absolute Error (MAE)**: Target less than $50.
+
+*   **Root Mean Squared Error (RMSE)**: Target less than $75.
 
 ---
 
 ## 📂 Dataset
-- **Source:** Public eBay laptop listings dataset (via Kaggle / web‑scraped data)
-- **Scope:** Used laptop and notebook listings
-- **Target Variable:** Listing price (USD)
+- **Source:** [Ebay Laptops and Netbooks Sales (Kaggle)](https://www.kaggle.com/datasets/elvinrustam/ebay-laptops-and-netbooks-sales)
+- **Scope:** Consumer-grade laptop listings
+- **Target Variable:** Price (USD)
 
 ### Key Features
-- Brand
-- Processor (CPU)
-- RAM
-- Storage type and capacity
-- Screen size
-- Operating system
-- Item condition
-
-> The dataset reflects real‑world marketplace challenges, including missing values, inconsistent formatting, and noisy textual fields.
+- Brand, Processor Type, Processor Tier (Engineered)
+- RAM Size, SSD/HDD Capacity, Total Storage (Engineered)
+- Screen Size, Maximum Resolution (Width/Height/Pixels)
+- Operating System, Item Condition
 
 ---
 
 ## 🧹 Data Cleaning & Preprocessing
-Major preprocessing steps included:
-- Removing duplicate listings
-- Cleaning and standardizing price formats
-- Handling missing and inconsistent feature values
-- Dropping columns with excessive missing data
-- Encoding categorical features
-- Scaling numerical variables where appropriate
-
-These steps were necessary to convert raw marketplace data into a model‑ready dataset.
-
----
-
-## 📊 Exploratory Data Analysis (EDA)
-EDA was conducted to better understand:
-- Price distributions and skewness
-- Price trends across brands and hardware specifications
-- Correlations between features and laptop prices
-- Outliers and anomalous listings
-
-Visualizations such as histograms, box plots, and correlation heatmaps supported feature selection and modeling decisions.
+- **Column Filtering**: Dropped columns with >60% missing values (e.g., Manufacturer Color).
+- **Normalization**: Standardized all storage and RAM capacities to GB; averaged price ranges.
+- **Signal Preservation**: Imputed categorical missing values as 'Unknown' to treat the absence of information as a predictive category.
+- **Outlier Capping**: Applied IQR-based capping specifically to Price and SSD Capacity.
+- **Feature Engineering**: Created interaction terms (e.g., `Ram_Screen_Interaction`) and a performance-based `Processor_Tier` ranking.
 
 ---
 
 ## 🤖 Modeling Approach
-Several regression models were explored and compared. The final model was selected based on predictive performance and generalization ability.
+We evaluated five regression models using `GridSearchCV` and 5-fold cross-validation to optimize hyperparameters. Numerical features were scaled using `StandardScaler` to ensure balanced model training.
 
-### Final Model
-- **Model:** Random Forest Regressor  
-- **Evaluation Metrics:**
-  - **R²:** ~0.78  
-  - **MAE:** ~$65  
-  - **RMSE:** ~$85  
+### Final Model Comparison
 
-These results indicate that the model captures a meaningful portion of price variation despite inherent marketplace noise and unobserved factors.
+| Model | R-squared (R2) | MAE | RMSE |
+| :--- | :--- | :--- | :--- |
+| **XGBoost Regressor** | **0.67** | $84.94 | **$134.09** |
+| **Random Forest** | 0.66 | **$83.99** | $135.94 |
+| Gradient Boosting | 0.63 | $92.23 | $141.61 |
+| MLP (Neural Net) | 0.52 | $103.08 | $162.96 |
+| Linear Regression | 0.48 | $112.59 | $168.21 |
 
 ---
 
 ## 📈 Key Insights
-- Brand, processor type, RAM, and storage capacity are among the strongest predictors of price.
-- Used laptop prices exhibit significant variance even among similar specifications.
-- Real‑world marketplace data introduces unavoidable noise that limits perfect prediction.
-
----
-
-## ⚠️ Limitations
-- Listings reflect asking prices, not finalized sale prices.
-- Seller reputation and listing quality were not included.
-- Textual descriptions were not fully leveraged using NLP techniques.
-- Geographic and temporal pricing effects were not modeled explicitly.
+- **Display is King**: Vertical resolution (`Resolution_Height`) and total `Pixel_Count` were among the most critical drivers of price across all models.
+- **The 'Unknown' Factor**: Across Linear and Ensemble models, the status `GPU_Unknown` was a top-tier predictor. The lack of detailed specs was a strong indicator of lower-end, budget devices.
+- **Storage Performance**: SSD capacity is a significantly stronger predictor than HDD capacity, reflecting the market premium for modern storage tech.
 
 ---
 
 ## 🔮 Future Work
-Potential improvements include:
-- Incorporating NLP features from listing descriptions
-- Using finalized sale prices where available
-- Modeling time‑based depreciation effects
-- Expanding the dataset across marketplaces
+- **NLP Integration**: Leverage listing titles and 'Seller Notes' to extract condition nuances.
+- **Temporal Analysis**: Incorporate the release year relative to the sale date to model depreciation more accurately.
+- **Model Stacking**: Combine XGBoost and MLP to capture both linear and complex non-linear hardware value relationships.
 
 ---
 
 ## ▶️ How to Run
-This project can be run in **Google Colab**:
-1. Open the notebook `Capstone_Laptop_prices_on_eBay.ipynb`
-2. Upload the dataset when prompted (or adjust file paths as needed)
-3. Run all cells from top to bottom
-
-### Dependencies
-- pandas  
-- numpy  
-- scikit-learn  
-- matplotlib  
-- seaborn  
+1. Open the notebook in **Google Colab**.
+2. Ensure `xgboost` and `scikeras` are installed.
+3. Run cells sequentially to perform cleaning, engineering, and model training.
 
 ---
 
 ## 📌 Conclusion
-This project demonstrates an end‑to‑end applied machine learning workflow using real‑world marketplace data. Despite inherent data limitations, the model provides meaningful pricing insights and highlights the key factors influencing used laptop resale values on eBay.
-``
+This project demonstrates that while used hardware prices are noisy, display quality and data completeness are the primary indicators of value. Ensemble tree-based models (XGBoost/Random Forest) proved most effective at capturing the non-linear interactions inherent in hardware pricing.
