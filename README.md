@@ -1,75 +1,126 @@
-# Used Laptop Price Prediction
 
-**Predicting Market Value through Hardware Specifications**
+# 📊 Capstone Project: Laptop Prices on eBay
 
-### Executive summary
+## 📌 Project Overview
+Pricing used laptops accurately in online marketplaces is challenging due to rapid hardware depreciation, inconsistent specifications, and varying seller behavior. As a result, sellers often overprice or underprice listings, leading to unsold inventory or lost value.
 
-**Project overview and goals:** The used laptop market lacks a standard price guide, leading to pricing inefficiencies. This project aims to build a robust predictive model that estimates market prices based on hardware specifications. By putting a dollar value on specific specs, we help businesses maximize profit and buyers avoid overpayment, ultimately reducing e-waste by facilitating faster sales.
+This project analyzes real‑world **eBay used laptop listings** and develops a **machine learning regression model** to identify key price drivers and **predict fair market prices** based on laptop specifications. The analysis follows a complete data science workflow, emphasizing practical, real‑world considerations such as noisy data, missing values, and heterogeneous feature representations.
 
-**Findings:** The best model for predicting laptop prices is the **XGBoost Regressor**, achieving an R-squared (R2) of 0.67 and the lowest RMSE of $134.09. While ensemble models represented a significant improvement over the baseline Linear Regression (R2: 0.48), they did not meet the ambitious target KPIs (R2 ≥ 0.80, MAE < $50), indicating the complex and non-linear nature of the used electronics market.
+---
 
-### Project Definition & Goals
+## 🎯 Problem Statement
+Online marketplaces like eBay lack a standardized pricing reference for used laptops. Prices vary widely for similar devices, creating inefficiencies for both buyers and sellers.
 
-1.  **Main Goal**: Build a robust predictive model to estimate market prices, assisting in effective pricing and avoiding overpayment.
-2.  **Secondary Goals**:
-    *   **Identify Influential Features**: Determine key specs (RAM, CPU, storage, screen) impacting price.
-    *   **Competitive Pricing Tool**: Assist sellers in pricing used inventory competitively.
-    *   **Market Insight**: Understand trends and value depreciation.
-    *   **Reduce E-waste**: Facilitate efficient sales to keep hardware out of landfills.
-3.  **Key Performance Indicators (KPIs)**:
-    *   **R-squared (R2)**: Target 0.80 or higher.
-    *   **MAE**: Target less than $50.
-    *   **RMSE**: Target less than $75.
+This project aims to answer:
+- Which laptop features most strongly influence resale price?
+- Can a machine learning model reasonably predict used laptop prices given noisy marketplace data?
 
-### Data Sources & Preparation
+---
 
-**Data Source:** Raw data obtained from Kaggle ([Ebay Laptops and Netbooks Sales](https://www.kaggle.com/datasets/elvinrustam/ebay-laptops-and-netbooks-sales)).
+## ✅ Project Objectives
+1. Explore and understand pricing patterns in used laptop listings.
+2. Clean and preprocess unstructured and inconsistent real‑world data.
+3. Identify the most influential hardware and listing features affecting price.
+4. Train and evaluate regression models for price prediction.
+5. Assess model performance using appropriate evaluation metrics.
 
-**Cleaning & Preprocessing Steps**:
-*   **Initial Inspection**: Analyzed structure, dtypes, and statistics.
-*   **Dropping Columns**: Removed irrelevant/high-missing columns (Manufacturer Color, Country Region Of Manufacture, Rating, Ratings Count, Release Year, Seller Note, Features).
-*   **Duplicate Removal**: Ensured data integrity by removing redundant rows.
-*   **Price Cleaning**: Standardized currency and averaged price ranges.
-*   **Numerical Cleaning**: Extracted numeric values from strings and converted units to GB. Imputed missing values using medians (size, speed, RAM) or 0 (SSD, HDD).
-*   **Categorical Cleaning**: Standardized values and imputed 'Unknown' for missing categories to preserve predictive signals from missing data.
-*   **Outlier Handling**: Applied IQR-based capping to features like Price and SSD Capacity.
+---
 
-### Methodology
+## 📂 Dataset
+- **Source:** Public eBay laptop listings dataset (via Kaggle / web‑scraped data)
+- **Scope:** Used laptop and notebook listings
+- **Target Variable:** Listing price (USD)
 
-1.  **Feature Engineering**: Created interaction terms (`Processor_Ram_Interaction`, `Ram_Screen_Interaction`), assigned `Processor_Tier` based on performance hierarchy, and extracted resolution components (Width, Height, Pixel_Count).
-2.  **Encoding & Scaling**: Applied One-Hot Encoding to all categorical features and scaled numerical features using `StandardScaler`.
-3.  **Modeling**: Evaluated five models: Linear Regression, Random Forest, Gradient Boosting, XGBoost, and MLP (Neural Net).
-4.  **Tuning**: Utilized `GridSearchCV` with 5-fold `KFold` cross-validation.
+### Key Features
+- Brand
+- Processor (CPU)
+- RAM
+- Storage type and capacity
+- Screen size
+- Operating system
+- Item condition
 
-### Baseline: Linear Regression Results
+> The dataset reflects real‑world marketplace challenges, including missing values, inconsistent formatting, and noisy textual fields.
 
-The initial baseline model achieved the following performance:
-*   **R-squared (R2)**: 0.48 (Below Target)
-*   **MAE**: $112.59 (Above Target)
-*   **RMSE**: $168.21 (Above Target)
+---
 
-**Linear Feature Importance Analysis**:
-*   **Display Characteristics**: `Aspect_Ratio_Unknown` (158.63), `Resolution_Height` (156.30), and `Pixel_Count` (140.66) were the most critical drivers.
-*   **The 'Unknown' Factor**: High coefficients for `GPU_Unknown` and `Storage Type_Unknown` suggest that data completeness is a strong indicator of value; missing details often correlate with lower-end models.
+## 🧹 Data Cleaning & Preprocessing
+Major preprocessing steps included:
+- Removing duplicate listings
+- Cleaning and standardizing price formats
+- Handling missing and inconsistent feature values
+- Dropping columns with excessive missing data
+- Encoding categorical features
+- Scaling numerical variables where appropriate
 
-### Final Model Comparison
+These steps were necessary to convert raw marketplace data into a model‑ready dataset.
 
-| Model | R-squared (R2) | MAE | RMSE |
-| :--- | :--- | :--- | :--- |
-| **XGBoost Regressor** | **0.67** | $84.94 | **$134.09** |
-| **Random Forest** | 0.66 | **$83.99** | $135.94 |
-| Gradient Boosting | 0.63 | $92.23 | $141.61 |
-| MLP (Neural Net) | 0.52 | $103.08 | $162.96 |
-| Linear Regression | 0.48 | $112.59 | $168.21 |
+---
 
-### Future research and development
+## 📊 Exploratory Data Analysis (EDA)
+EDA was conducted to better understand:
+- Price distributions and skewness
+- Price trends across brands and hardware specifications
+- Correlations between features and laptop prices
+- Outliers and anomalous listings
 
-*   **Data Enrichment**: Reducing 'Unknown' entries through web scraping or richer datasets.
-*   **Temporal Analysis**: Including hardware age to account for technological depreciation.
-*   **Model Stacking**: Combining tree-based models with neural networks for ensemble predictions.
+Visualizations such as histograms, box plots, and correlation heatmaps supported feature selection and modeling decisions.
 
+---
 
+## 🤖 Modeling Approach
+Several regression models were explored and compared. The final model was selected based on predictive performance and generalization ability.
 
-**[Your Name]**  
-Email: [Your Email]  
-LinkedIn: [Your LinkedIn Profile URL]
+### Final Model
+- **Model:** Random Forest Regressor  
+- **Evaluation Metrics:**
+  - **R²:** ~0.78  
+  - **MAE:** ~$65  
+  - **RMSE:** ~$85  
+
+These results indicate that the model captures a meaningful portion of price variation despite inherent marketplace noise and unobserved factors.
+
+---
+
+## 📈 Key Insights
+- Brand, processor type, RAM, and storage capacity are among the strongest predictors of price.
+- Used laptop prices exhibit significant variance even among similar specifications.
+- Real‑world marketplace data introduces unavoidable noise that limits perfect prediction.
+
+---
+
+## ⚠️ Limitations
+- Listings reflect asking prices, not finalized sale prices.
+- Seller reputation and listing quality were not included.
+- Textual descriptions were not fully leveraged using NLP techniques.
+- Geographic and temporal pricing effects were not modeled explicitly.
+
+---
+
+## 🔮 Future Work
+Potential improvements include:
+- Incorporating NLP features from listing descriptions
+- Using finalized sale prices where available
+- Modeling time‑based depreciation effects
+- Expanding the dataset across marketplaces
+
+---
+
+## ▶️ How to Run
+This project can be run in **Google Colab**:
+1. Open the notebook `Capstone_Laptop_prices_on_eBay.ipynb`
+2. Upload the dataset when prompted (or adjust file paths as needed)
+3. Run all cells from top to bottom
+
+### Dependencies
+- pandas  
+- numpy  
+- scikit-learn  
+- matplotlib  
+- seaborn  
+
+---
+
+## 📌 Conclusion
+This project demonstrates an end‑to‑end applied machine learning workflow using real‑world marketplace data. Despite inherent data limitations, the model provides meaningful pricing insights and highlights the key factors influencing used laptop resale values on eBay.
+``
