@@ -49,6 +49,8 @@ Online marketplaces lack a standardized pricing reference for used laptops, lead
 ## 🤖 Modeling Approach
 We evaluated five regression models using `GridSearchCV` and 5-fold cross-validation to optimize hyperparameters. Numerical features were scaled using `StandardScaler` to ensure balanced model training.
 
+> **Key Result:** The final **XGBoost Regressor** model explains **~67%** of price variance with an average error (MAE) of **~$85**.
+
 ### Final Model Comparison
 
 | Model | R-squared (R2) | MAE | RMSE |
