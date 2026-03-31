@@ -91,6 +91,6 @@ This project demonstrates that while used hardware prices are noisy, display qua
 
 ## 👉 Notebook Link
 
-Explore the full analysis and code in the Google Colab notebook:
+Explore the full analysis and code in the notebook:
 
 [Laptop prices on eBay](https://github.com/tahirp/Capstone-Laptop-prices-on-eBay/blob/main/Capstone_Laptop_prices_on_eBay.ipynb)
